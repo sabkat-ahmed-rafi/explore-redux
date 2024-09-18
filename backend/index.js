@@ -1,4 +1,4 @@
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const express = require('express')
 const app = express()
 const port = process.env.PORT || 3000
@@ -59,6 +59,44 @@ async function run() {
             return res.status(500).send({errorMessage:'Server Error'});
         }
 
+    })
+
+    app.put('/data/:id', async (req, res) => {
+      const id = req.params.id;
+      console.log('ID:', id);
+      const updatedData = req.body;
+      const query = { _id: new ObjectId(id) };
+      console.log('Updated Data:', updatedData);
+  
+      try {
+          // Check if the document exists
+          const existingDoc = await addedData.findOne(query);
+          console.log('Existing Document:', existingDoc);
+  
+          if (!existingDoc) {
+              return res.status(404).send({ errorMessage: 'Document not found' });
+          }
+  
+          const result = await addedData.updateOne(query, { $set: updatedData }, { upsert: true });
+          console.log('Update Result:', result);
+  
+          if (result.modifiedCount > 0) {
+              return res.status(200).send({ successMessage: 'Update successful' });
+          } else {
+              return res.status(200).send({ successMessage: 'No changes made' });
+          }
+      } catch (err) {
+          console.error(err);
+          return res.status(500).send({ errorMessage: 'Server Error' });
+      }
+  });
+  
+
+    app.delete('/data/:id', async (req, res) => {
+      const id = req.params.id
+      const query = { _id: new ObjectId(id)}
+      const result = addedData.deleteOne(query)
+      return res.status(201).send({message: 'Delete successful'})
     })
 
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
