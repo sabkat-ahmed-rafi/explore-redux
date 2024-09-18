@@ -7,6 +7,7 @@ export const apiSlice = createApi({
     endpoints: (builder) => ({
         getAllData: builder.query({
             query: () => "/data",
+            // using the same name for tags because if the data change then only it will refetch the data or it will remain unchanged
             providesTags: ['Data']
         }),
         getSingleData: builder.query({
@@ -19,6 +20,7 @@ export const apiSlice = createApi({
                 method: 'POST',
                 body: newData
             }),
+            // using the same name for tags because if the data change then only it will refetch the data or it will remain unchanged
             invalidatesTags: ['Data']
         })
     })
