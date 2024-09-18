@@ -12,6 +12,7 @@ import SignIn from './components/SignIn';
 import { Provider } from 'react-redux';
 import store from './store/store'
 import Test from './components/Test';
+import AddForm from './components/AddForm';
 
 
 
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: '/test',
         element: <Test />
+      },
+      {
+        path: "/add",
+        element: <AddForm />
       }
     ],
   },
